@@ -17,7 +17,7 @@ class ResNet(nn.Module):
     - Stage: A sequence of blocks that operate at the same spatial resolution in the network. 
             For example, in ResNet, the network downsamples (reduces spatial dimensions) at the beginning of a new stage.
     '''
-    def __init__(self, img_channels: int, num_layers: int=18, num_classes: int  = 1000):
+    def __init__(self, img_channels: int, num_layers: int = 18, num_classes: int = 1000):
         super(ResNet, self).__init__()
         if num_layers == 18:
             # Number of blocks per stage for ResNet-18 is 2,2,2,2 per stage.
@@ -34,7 +34,11 @@ class ResNet(nn.Module):
             # 1) Define the number of blocks per stage. Hint: ResNet-34 has 3, 4, 6, and 3 blocks per stage.
             # 2) Set the expansion factor. Hint: ResNet-34 uses BasicBlock, which has an expansion factor of 1.
             # 3) Set the block type to BasicBlock.
-            pass
+            block_counts  = [3, 4, 6, 3]
+            
+            self.expansion = 1
+            
+            blockType = BasicBlock
 
         
         elif num_layers == 50:
@@ -42,7 +46,11 @@ class ResNet(nn.Module):
             # 1) Define the number of blocks per stage. Hint: ResNet-50 uses bottleneck blocks with 3, 4, 6, and 3 blocks per stage.
             # 2) Set the expansion factor. Hint: Bottleneck blocks have an expansion factor of 4.
             # 3) Set the block type to BottleneckBlock.
-            pass
+            block_counts  = [3, 4, 6, 3]
+            
+            self.expansion = 4
+            
+            blockType = BottleneckBlock
 
         
         elif num_layers == 101:
@@ -50,7 +58,11 @@ class ResNet(nn.Module):
             # 1) Define the number of blocks per stage. Hint: ResNet-101 uses bottleneck blocks with 3, 4, 23, and 3 blocks per stage.
             # 2) Set the expansion factor. Hint: Bottleneck blocks have an expansion factor of 4.
             # 3) Set the block type to BottleneckBlock.
-            pass
+            block_counts  = [3, 4, 23, 3]
+            
+            self.expansion = 4
+            
+            blockType = BottleneckBlock
             
         
         elif num_layers == 152:
@@ -58,7 +70,11 @@ class ResNet(nn.Module):
             # 1) Define the number of blocks per stage. Hint: ResNet-152 uses bottleneck blocks with 3, 8, 36, and 3 blocks per stage.
             # 2) Set the expansion factor. Hint: Bottleneck blocks have an expansion factor of 4.
             # 3) Set the block type to BottleneckBlock.
-            pass
+            block_counts  = [3, 8, 36, 3]
+            
+            self.expansion = 4
+            
+            blockType = BottleneckBlock
             
             
         else:
@@ -85,7 +101,7 @@ class ResNet(nn.Module):
         self.fc = nn.Linear(512*self.expansion, num_classes)
     
 
-    def build_stage(self, out_channels: int, num_blocks: int, stride: int, block) -> nn.Sequential:
+    def build_stage(self, out_channels: int, num_blocks: int, stride: int, block: nn.Module) -> nn.Sequential:
         '''
         Builds a stage which consists of several residual blocks.
 
