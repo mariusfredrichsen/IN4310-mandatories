@@ -87,7 +87,7 @@ def main():
     print()
     print("Loading image data")
     
-    BATCH_SIZE = 128
+    BATCH_SIZE = 64
     NUM_WORKERS = 4
     is_cuda = device.type == "cuda"
     train_loader = DataLoader(train_set, batch_size=BATCH_SIZE, shuffle=True, num_workers=NUM_WORKERS, pin_memory=is_cuda) # pin memory loads it into the gpu, works only with cuda
