@@ -21,7 +21,7 @@ def main():
     IMAGE_SIZE = 150
     IMG_CHANNELS = 3
     NUM_CLASSES = 6
-    NUM_LAYERS = 54
+    NUM_LAYERS = 152
     
     # A lot of this code is from the seminars
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
