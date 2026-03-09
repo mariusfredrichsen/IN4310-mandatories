@@ -17,7 +17,7 @@ from datetime import datetime
 
 def main():
     PATH_TO_DATA = "../../../../../shared/courses/IN3310/mandatory1_data"
-    PATH_TO_DATA = "../Dataset"
+    # PATH_TO_DATA = "../Dataset"
 
     IMAGE_SIZE = 150
     IMG_CHANNELS = 3
@@ -96,7 +96,7 @@ def main():
     test_loader = DataLoader(test_set, batch_size=BATCH_SIZE, shuffle=False, num_workers=NUM_WORKERS, pin_memory=is_cuda)
     
     lr = 0.0001
-    epochs = 1
+    epochs = 50
     
     # setup of folder
     timestamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
