@@ -1,0 +1,31 @@
+Device: cuda
+Seed: 42
+Error loading data:  [Errno 2] No such file or directory: '../../../../shared/courses/IN3310/mandatory1_data'
+Traceback (most recent call last):
+  File "/itf-fi-ml/home/mafredri/IN4310/IN4310-mandatories/Precode/main.py", line 218, in <module>
+    main()
+  File "/itf-fi-ml/home/mafredri/IN4310/IN4310-mandatories/Precode/main.py", line 48, in main
+    np.arange(len(targets)), 
+                  ^^^^^^^
+UnboundLocalError: cannot access local variable 'targets' where it is not associated with a value
+Device: cuda
+Seed: 42
+
+Data Ready:
+   - Training Set:   11923 images (70.0%)
+   - Validation Set: 2044 images (12.0%)
+   - Test Set:       3067 images (18.0%)
+   - Input Shape:    3 channels x 150 x 150 = 67500 features
+
+Checking if data is setup correctly
+Overlaps train & val: 0
+Overlaps train & test: 0
+Overlaps val & test: 0
+
+Loading image data
+Epoch:  0
+Epoch 1: New best validation accuracy: 68.10%
+Epoch:  1
+Epoch 2: New best validation accuracy: 74.32%
+Epoch:  2
+Epoch 3: New best validation accuracy: 77.94%

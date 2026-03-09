@@ -16,7 +16,7 @@ from datetime import datetime
 
 
 def main():
-    PATH_TO_DATA = "../Dataset"
+    PATH_TO_DATA = "../../../../../shared/courses/IN3310/mandatory1_data"
 
     IMAGE_SIZE = 150
     IMG_CHANNELS = 3
