@@ -104,7 +104,7 @@ def main():
     os.makedirs(save_dir, exist_ok=True)
         
     # setup of model
-    model = ResNet(img_channels = IMG_CHANNELS, num_layers = 34, num_classes = NUM_CLASSES).to(device)
+    model = ResNet(img_channels = IMG_CHANNELS, num_layers = NUM_LAYERS, num_classes = NUM_CLASSES).to(device)
     criterion = nn.CrossEntropyLoss()
     optimizer = optim.Adam(model.parameters(), lr=lr)
     
