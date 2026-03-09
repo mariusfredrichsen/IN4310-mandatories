@@ -17,11 +17,12 @@ from datetime import datetime
 
 def main():
     PATH_TO_DATA = "../../../../../shared/courses/IN3310/mandatory1_data"
+    PATH_TO_DATA = "../Dataset"
 
     IMAGE_SIZE = 150
     IMG_CHANNELS = 3
     NUM_CLASSES = 6
-    NUM_LAYERS = 101
+    NUM_LAYERS = 18
     
     # A lot of this code is from the seminars
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
@@ -87,7 +88,7 @@ def main():
     print()
     print("Loading image data")
     
-    BATCH_SIZE = 128
+    BATCH_SIZE = 32
     NUM_WORKERS = 4
     is_cuda = device.type == "cuda"
     train_loader = DataLoader(train_set, batch_size=BATCH_SIZE, shuffle=True, num_workers=NUM_WORKERS, pin_memory=is_cuda) # pin memory loads it into the gpu, works only with cuda
@@ -95,7 +96,7 @@ def main():
     test_loader = DataLoader(test_set, batch_size=BATCH_SIZE, shuffle=False, num_workers=NUM_WORKERS, pin_memory=is_cuda)
     
     lr = 0.0001
-    epochs = 25
+    epochs = 1
     
     # setup of folder
     timestamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
@@ -138,8 +139,9 @@ def main():
         # part b, validation accuracy
         model.eval()
         val_loss = 0.0
-        correct = 0
-        total = 0
+        
+        all_predictions = []
+        all_labels = []
 
         with torch.no_grad():
             for images, labels in val_loader:
@@ -149,11 +151,14 @@ def main():
                 val_loss += v_loss.item()
                 
                 _, predicted = torch.max(output.data, 1)
-                total += labels.size(0)
-                correct += (predicted == labels).sum().item()
+                
+                all_predictions.extend(predicted)
+                all_labels.extend(labels)
+                
+                
             
         avg_val_loss = val_loss / len(val_loader)
-        val_acc = 100 * correct / total
+        val_acc = 100 * sum([p == l for p, l in zip(all_predictions, all_labels)]) / len(all_labels)
         
         with open(log_path, "a") as f:
             f.write(f"{epoch+1},{avg_train_loss:.4f},{avg_val_loss:.4f},{val_acc:.2f}\n")
