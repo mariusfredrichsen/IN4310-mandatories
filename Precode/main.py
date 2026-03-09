@@ -93,8 +93,8 @@ def main():
     val_loader = DataLoader(val_set, batch_size=BATCH_SIZE, shuffle=False, num_workers=NUM_WORKERS, pin_memory=is_cuda)
     test_loader = DataLoader(test_set, batch_size=BATCH_SIZE, shuffle=False, num_workers=NUM_WORKERS, pin_memory=is_cuda)
     
-    lr = 0.001
-    epochs = 3
+    lr = 0.0001
+    epochs = 10
     
     # setup of folder
     timestamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
