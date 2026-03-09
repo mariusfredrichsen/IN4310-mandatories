@@ -1,0 +1,50 @@
+Device: cuda
+Seed: 42
+
+Data Ready:
+   - Training Set:   11923 images (70.0%)
+   - Validation Set: 2044 images (12.0%)
+   - Test Set:       3067 images (18.0%)
+   - Input Shape:    3 channels x 150 x 150 = 67500 features
+
+Checking if data is setup correctly
+Overlaps train & val: 0
+Overlaps train & test: 0
+Overlaps val & test: 0
+
+Loading image data
+Epoch:  0
+Epoch 1: New best validation accuracy: 46.97%
+Epoch:  1
+Epoch 2: New best validation accuracy: 65.41%
+Epoch:  2
+Epoch:  3
+Epoch 4: New best validation accuracy: 75.39%
+Epoch:  4
+Epoch 5: New best validation accuracy: 76.81%
+Epoch:  5
+Epoch:  6
+Epoch 7: New best validation accuracy: 76.91%
+Epoch:  7
+Epoch:  8
+Epoch 9: New best validation accuracy: 79.94%
+Epoch:  9
+Epoch:  10
+Epoch:  11
+Epoch:  12
+Epoch:  13
+Epoch:  14
+Epoch:  15
+Epoch 16: New best validation accuracy: 80.68%
+Epoch:  16
+Epoch:  17
+Epoch 18: New best validation accuracy: 81.36%
+Epoch:  18
+Epoch 19: New best validation accuracy: 81.41%
+Epoch:  19
+Epoch:  20
+Epoch:  21
+Epoch:  22
+Epoch:  23
+Epoch:  24
+Epoch 25: New best validation accuracy: 81.60%
