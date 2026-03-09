@@ -118,6 +118,7 @@ def main():
     
     for epoch in range(epochs):
         print("Epoch: ", epoch)
+        # part a, loading the training data
         model.train()
         train_loss = 0.0
         
@@ -134,6 +135,7 @@ def main():
         
         avg_train_loss = train_loss / len(train_loader)
         
+        # part b, validation accuracy
         model.eval()
         val_loss = 0.0
         correct = 0
