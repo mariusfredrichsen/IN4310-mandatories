@@ -1,4 +1,3 @@
-from typing import Dict, List, Tuple
 from ResNet import ResNet
 import os
 import torch
@@ -8,6 +7,7 @@ from torch.utils.data import Subset, DataLoader
 import torchvision
 import torchvision.transforms as transforms
 from sklearn.model_selection import train_test_split
+from sklearn.metrics import average_precision_score, precision_score
 import matplotlib.pyplot as plt
 import pandas as pd
 import numpy as np
@@ -88,7 +88,7 @@ def main():
     print()
     print("Loading image data")
     
-    BATCH_SIZE = 64
+    BATCH_SIZE = 32
     NUM_WORKERS = 4
     is_cuda = device.type == "cuda"
     train_loader = DataLoader(train_set, batch_size=BATCH_SIZE, shuffle=True, num_workers=NUM_WORKERS, pin_memory=is_cuda) # pin memory loads it into the gpu, works only with cuda
@@ -112,10 +112,12 @@ def main():
     # setup of data logging
     log_path = f"{save_dir}/log.csv"
     with open(log_path, "w") as f:
-        f.write("epoch,train_loss,val_loss,val_acc\n")
+        ap_headers = ",".join([f"AP_class{i}" for i in range(NUM_CLASSES)])
+        header = f"epoch,train_loss,val_loss,val_acc,mAP,{ap_headers}\n"
+        f.write(header)
     
     # training
-    best_acc = 0.0
+    best_mAP = 0.0
     
     for epoch in range(epochs):
         print("Epoch: ", epoch)
@@ -140,6 +142,7 @@ def main():
         model.eval()
         val_loss = 0.0
         
+        all_probabilities = []
         all_predictions = []
         all_labels = []
 
@@ -150,24 +153,44 @@ def main():
                 v_loss = criterion(output, labels)
                 val_loss += v_loss.item()
                 
+                probabilities = torch.softmax(output.data, 1)
                 _, predicted = torch.max(output.data, 1)
                 
-                all_predictions.extend(predicted)
-                all_labels.extend(labels)
+                all_probabilities.extend(probabilities.cpu().numpy())
+                all_predictions.extend(predicted.cpu().numpy())
+                all_labels.extend(labels.cpu().numpy())
                 
-                
+        all_probabilities = np.array(all_probabilities)
+        all_predictions = np.array(all_predictions)
+        all_labels = np.array(all_labels)
+        
+        acc_scores = []
+        ap_scores = []
+        for i in range(NUM_CLASSES):
+            class_probabilities = all_probabilities[:, i]
+            binary_labels = (all_labels == i).astype(int)
             
+            class_ap = average_precision_score(binary_labels, class_probabilities)
+            ap_scores.append(class_ap)
+            
+            class_acc = np.mean(all_predictions[all_labels == i] == i)
+            acc_scores.append(class_acc)
+            
+            
+                    
         avg_val_loss = val_loss / len(val_loader)
         val_acc = 100 * sum([p == l for p, l in zip(all_predictions, all_labels)]) / len(all_labels)
+        mAP = np.mean(ap_scores)
+        ap_str = ",".join([f"{ap:.4f}" for ap in ap_scores])
         
         with open(log_path, "a") as f:
-            f.write(f"{epoch+1},{avg_train_loss:.4f},{avg_val_loss:.4f},{val_acc:.2f}\n")
+            f.write(f"{epoch+1},{avg_train_loss:.4f},{avg_val_loss:.4f},{val_acc:.2f},{mAP:.4f},{ap_str}\n")
         
         torch.save(model.state_dict(), f"{save_dir}/current_model.pth")
-        if val_acc > best_acc:
-            best_acc = val_acc
+        if mAP > best_mAP:
+            best_mAP = mAP
             torch.save(model.state_dict(), f"{save_dir}/best_model.pth")
-            print(f"Epoch {epoch+1}: New best validation accuracy: {best_acc:.2f}%")
+            print(f"Epoch {epoch+1}: New best mean Average Precision: {best_mAP:.2f}%")
         
     def evaluate_ckpt(path):
         checkpoint = torch.load(path, weights_only=True)
