@@ -21,6 +21,7 @@ def main():
     IMAGE_SIZE = 150
     IMG_CHANNELS = 3
     NUM_CLASSES = 6
+    NUM_LAYERS = 54
     
     # A lot of this code is from the seminars
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
@@ -98,7 +99,7 @@ def main():
     
     # setup of folder
     timestamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
-    model_name = "Test"
+    model_name = f"{NUM_LAYERS}-ResNet"
     save_dir = f"models/{model_name}_{timestamp}"
     os.makedirs(save_dir, exist_ok=True)
         

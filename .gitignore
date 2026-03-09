@@ -1,2 +1,4 @@
 Dataset
 .venv
+Precode/models/**/best_model.pth
+Precode/models/**/current_model.pth
