@@ -1,0 +1,2 @@
+loss,total_acc,mAP,AP_class0,AP_class1,AP_class2,AP_class3,AP_class4,AP_class5,ACC_class0,ACC_class1,ACC_class2,ACC_class3,ACC_class4,ACC_class5
+0.3954,85.43,0.9284,0.9208,0.9900,0.8960,0.8987,0.9355,0.9295,0.8689,0.9232,0.8120,0.8227,0.8623,0.8439
