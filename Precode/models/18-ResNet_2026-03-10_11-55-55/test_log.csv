@@ -1,2 +1,0 @@
-epoch, train_loss, val_loss, val_acc, mAP   , AP_class0, AP_class1, AP_class2, AP_class3, AP_class4, AP_class5, ACC_class0, ACC_class1, ACC_class2, ACC_class3, ACC_class4, ACC_class5
-    1,     0.9298,   0.7547,   72.71, 0.8170,    0.7692,    0.9601,    0.7735,    0.7762,    0.7826,    0.8402,     0.3975,     0.9253,     0.6335,     0.8154,     0.6687,     0.8979

@@ -1,2 +1,0 @@
-epoch,train_loss,val_loss,val_acc,mAP,AP_class0,AP_class1,AP_class2,AP_class3,AP_class4,AP_class5
-1,1.2946,0.9447,61.25,0.6826,0.5686,0.9434,0.6794,0.6522,0.4825,0.7693
