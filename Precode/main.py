@@ -15,9 +15,70 @@ from datetime import datetime
 
 
 
+def evaluate_model(model, loader, device, criterion, num_classes, save_path=None, softmax_path=None):
+        model.eval()
+        total_loss = 0.0
+        all_probs = []
+        all_preds = []
+        all_labels = []
+
+        with torch.no_grad():
+            for images, labels in loader:
+                images, labels = images.to(device), labels.to(device)
+                output = model(images)
+                loss = criterion(output, labels)
+                total_loss += loss.item()
+                
+                probs = torch.softmax(output, dim=1)
+                _, preds = torch.max(output, 1)
+                
+                all_probs.extend(probs.cpu().numpy())
+                all_preds.extend(preds.cpu().numpy())
+                all_labels.extend(labels.cpu().numpy())
+
+        all_probs = np.array(all_probs)
+        all_preds = np.array(all_preds)
+        all_labels = np.array(all_labels)
+        
+        ap_scores = []
+        acc_scores = []
+        for i in range(num_classes):
+            mask = (all_labels == i)
+            binary_labels = mask.astype(int)
+            
+            ap = average_precision_score(binary_labels, all_probs[:, i])
+            ap_scores.append(ap)
+            
+            acc = np.mean(all_preds[mask] == i)
+            acc_scores.append(acc)
+
+        avg_loss = total_loss / len(loader)
+        mean_acc = 100 * np.mean(all_preds == all_labels)
+        mAP = np.mean(ap_scores)
+
+        ap_headers = ",".join([f"AP_class{i}" for i in range(num_classes)])
+        acc_headers = ",".join([f"ACC_class{i}" for i in range(num_classes)])
+        
+        if save_path:
+            with open(save_path, "w") as f:
+                f.write(f"loss,total_acc,mAP,{ap_headers},{acc_headers}\n")
+                ap_str = ",".join([f"{s:.4f}" for s in ap_scores])
+                acc_str = ",".join([f"{s:.4f}" for s in acc_scores])
+                f.write(f"{avg_loss:.4f},{mean_acc:.2f},{mAP:.4f},{ap_str},{acc_str}\n")
+        
+        if softmax_path:
+            np.save(softmax_path, all_probs)
+
+        return mAP, mean_acc, avg_loss, ap_scores, acc_scores, all_probs
+
+
+
+
+
+
 def main():
     PATH_TO_DATA = "../../../../../shared/courses/IN3310/mandatory1_data"
-    # PATH_TO_DATA = "../Dataset"
+    PATH_TO_DATA = "../Dataset"
 
     IMAGE_SIZE = 150
     IMG_CHANNELS = 3
@@ -45,7 +106,7 @@ def main():
     except Exception as e:
         print("Error loading data: ", e)
     
-    # 
+    # setup data
     train_idx, val_test_idx = train_test_split(
         np.arange(len(targets)), 
         test_size=0.3, 
@@ -95,8 +156,8 @@ def main():
     val_loader = DataLoader(val_set, batch_size=BATCH_SIZE, shuffle=False, num_workers=NUM_WORKERS, pin_memory=is_cuda)
     test_loader = DataLoader(test_set, batch_size=BATCH_SIZE, shuffle=False, num_workers=NUM_WORKERS, pin_memory=is_cuda)
     
-    lr = 0.0001
-    epochs = 50
+    lr = 0.001
+    epochs = 1
     
     # setup of folder
     timestamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
@@ -113,7 +174,15 @@ def main():
     log_path = f"{save_dir}/log.csv"
     with open(log_path, "w") as f:
         ap_headers = ",".join([f"AP_class{i}" for i in range(NUM_CLASSES)])
-        header = f"epoch,train_loss,val_loss,val_acc,mAP,{ap_headers}\n"
+        acc_headers = ",".join([f"ACC_class{i}" for i in range(NUM_CLASSES)])
+        header = f"epoch,train_loss,val_loss,val_acc,mAP,{ap_headers},{acc_headers}\n"
+        f.write(header)
+    
+    test_log_path = f"{save_dir}/test_log.csv"
+    with open(test_log_path, "w") as f:
+        ap_headers = ",".join([f"AP_class{i}" for i in range(NUM_CLASSES)])
+        acc_headers = ",".join([f"ACC_class{i}" for i in range(NUM_CLASSES)])
+        header = f"epoch,test_loss,test_acc,mAP,{ap_headers},{acc_headers}\n"
         f.write(header)
     
     # training
@@ -139,95 +208,85 @@ def main():
         avg_train_loss = train_loss / len(train_loader)
         
         # part b, validation accuracy
-        model.eval()
-        val_loss = 0.0
-        
-        all_probabilities = []
-        all_predictions = []
-        all_labels = []
-
-        with torch.no_grad():
-            for images, labels in val_loader:
-                images, labels = images.to(device), labels.to(device)
-                output = model(images)
-                v_loss = criterion(output, labels)
-                val_loss += v_loss.item()
-                
-                probabilities = torch.softmax(output.data, 1)
-                _, predicted = torch.max(output.data, 1)
-                
-                all_probabilities.extend(probabilities.cpu().numpy())
-                all_predictions.extend(predicted.cpu().numpy())
-                all_labels.extend(labels.cpu().numpy())
-                
-        all_probabilities = np.array(all_probabilities)
-        all_predictions = np.array(all_predictions)
-        all_labels = np.array(all_labels)
-        
-        acc_scores = []
-        ap_scores = []
-        for i in range(NUM_CLASSES):
-            class_probabilities = all_probabilities[:, i]
-            binary_labels = (all_labels == i).astype(int)
-            
-            class_ap = average_precision_score(binary_labels, class_probabilities)
-            ap_scores.append(class_ap)
-            
-            class_acc = np.mean(all_predictions[all_labels == i] == i)
-            acc_scores.append(class_acc)
-            
-            
+        val_mAP, val_acc, avg_val_loss, val_ap_scores, val_acc_scores, _ = evaluate_model(
+            model=model,
+            loader=val_loader,
+            device=device,
+            criterion=criterion,
+            num_classes=NUM_CLASSES,
+        )
                     
-        avg_val_loss = val_loss / len(val_loader)
-        val_acc = 100 * sum([p == l for p, l in zip(all_predictions, all_labels)]) / len(all_labels)
-        mAP = np.mean(ap_scores)
-        ap_str = ",".join([f"{ap:.4f}" for ap in ap_scores])
-        
         with open(log_path, "a") as f:
-            f.write(f"{epoch+1},{avg_train_loss:.4f},{avg_val_loss:.4f},{val_acc:.2f},{mAP:.4f},{ap_str}\n")
+            val_ap_str = ",".join([f"{s:.4f}" for s in val_ap_scores])
+            val_acc_str = ",".join([f"{s:.4f}" for s in val_acc_scores])
+            f.write(f"{epoch+1},{avg_train_loss:.4f},{avg_val_loss:.4f},{val_acc:.2f},{val_mAP:.4f},{val_ap_str},{val_acc_str}\n")
         
         torch.save(model.state_dict(), f"{save_dir}/current_model.pth")
-        if mAP > best_mAP:
-            best_mAP = mAP
+        if val_mAP > best_mAP:
+            best_mAP = val_mAP
             torch.save(model.state_dict(), f"{save_dir}/best_model.pth")
             print(f"Epoch {epoch+1}: New best mean Average Precision: {best_mAP:.2f}%")
+            
+        test_mAP, test_acc, avg_test_loss, test_ap_scores, test_acc_scores, test_softmax = evaluate_model(
+            model=model,
+            loader=test_loader,
+            device=device,
+            criterion=criterion,
+            num_classes=NUM_CLASSES
+        )
         
-    def evaluate_ckpt(path):
-        checkpoint = torch.load(path, weights_only=True)
-        model.load_state_dict(checkpoint)
-        model.eval()
+        with open(test_log_path, "a") as f:
+            test_ap_str = ",".join([f"{s:.4f}" for s in test_ap_scores])
+            test_acc_str = ",".join([f"{s:.4f}" for s in test_acc_scores])
+            f.write(f"{epoch+1},{avg_test_loss:.4f},{test_acc:.2f},{test_mAP:.4f},{test_ap_str},{test_acc_str}\n")
         
-        correct = 0
-        total = 0
-        with torch.no_grad():
-            for images, labels in test_loader:
-                images, labels = images.to(device), labels.to(device)
-                output = model(images)
-                _, pred = torch.max(output.data, 1)
-                total += labels.size(0)
-                correct += (pred == labels).sum().item()
-        return 100 * correct / total
-
-    final_test_acc = evaluate_ckpt(f"{save_dir}/best_model.pth")
     
-    with open(f"{save_dir}/test_results.csv", "w") as f:
-        f.write("model_version,test_acc\n")
-        f.write(f"best_model,{final_test_acc:.4f}\n")
+    test_loaded_log_path = f"{save_dir}/test_loaded_log.csv"
+    model.load_state_dict(torch.load(f"{save_dir}/best_model.pth", weights_only=True))
+    l_test_mAP, l_test_acc, l_avg_test_loss, l_test_ap_scores, l_test_acc_scores, l_test_softmax = evaluate_model(
+        model=model,
+        loader=test_loader,
+        device=device,
+        criterion=criterion,
+        num_classes=NUM_CLASSES,
+        save_path=test_loaded_log_path,
+        softmax_path=test_loaded_log_path
+    )
     
     try:
+        # train and loss
         df = pd.read_csv(log_path)
-        plt.figure(figsize=(10, 4))
+        df_t = pd.read_csv(test_log_path)
+        
         plt.subplot(1, 2, 1)
-        plt.plot(df['epoch'], df['train_loss'], label='Train Loss')
-        plt.plot(df['epoch'], df['val_loss'], label='Val Loss')
+        plt.plot(df['epoch'], df['train_loss'], label='Train Loss', color='blue')
+        plt.plot(df['epoch'], df['val_loss'], label='Val Loss', color='orange')
+        plt.plot(df_t['epoch'], df_t['test_loss'], label='Test Loss', color='red', linestyle='--')
+        
+        plt.title('Loss History (Train vs Val vs Test)')
+        plt.xlabel('Epochs')
+        plt.ylabel('Loss')
         plt.legend()
-        plt.title('Loss History')
+        plt.grid(True, alpha=0.3)
+        
+        
         
         plt.subplot(1, 2, 2)
-        plt.plot(df['epoch'], df['val_acc'], color='green', marker='o')
-        plt.title('Validation Accuracy')
-        plt.savefig(f"{save_dir}/training_plot.png")
-        # plt.show()
+        plt.plot(df['epoch'], df['val_acc'], label='Val Accuracy', color='green', marker='o')
+        plt.plot(df_t['epoch'], df_t['test_acc'], label='Test Accuracy', color='purple', marker='x')
+        
+        plt.title('Accuracy History')
+        plt.xlabel('Epochs')
+        plt.ylabel('Accuracy (%)')
+        plt.legend()
+        plt.grid(True, alpha=0.3)
+        
+        
+        
+        plt.tight_layout()
+        plt.savefig(f"{save_dir}/training_summary_plot.png")
+        print(f"Plot saved to {save_dir}/training_summary_plot.png")
+        
     except Exception as e:
         print(f"Plotting error: {e}")
     
