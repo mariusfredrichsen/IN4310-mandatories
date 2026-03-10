@@ -156,8 +156,8 @@ def main():
     val_loader = DataLoader(val_set, batch_size=BATCH_SIZE, shuffle=False, num_workers=NUM_WORKERS, pin_memory=is_cuda)
     test_loader = DataLoader(test_set, batch_size=BATCH_SIZE, shuffle=False, num_workers=NUM_WORKERS, pin_memory=is_cuda)
     
-    learning_rates = [0.1, 0.01, 0.001, 0.0001]
-    epochs_list = [10, 25, 50, 75]
+    learning_rates = [0.01, 0.001, 0.0001]
+    epochs_list = [10, 25, 50]
     opt_names = ["Adam", "Optim"]
     
     for lr in learning_rates:
@@ -191,7 +191,7 @@ def main():
                     f.write(header)
                 
                 # training
-                best_mAP = 0.0
+                best_mAP = -1.0
                 
                 for epoch in range(epochs):
                     print("Epoch: ", epoch)
@@ -293,6 +293,7 @@ def main():
                     
                     plt.tight_layout()
                     plt.savefig(f"{save_dir}/training_summary_plot.png")
+                    plt.close()
                     
                 except Exception as e:
                     print(f"Plotting error: {e}")
