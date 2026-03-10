@@ -14,27 +14,27 @@ Overlaps val & test: 0
 
 Loading image data
 Epoch:  0
-Epoch 1: New best mean Average Precision: 0.79%
+Epoch 1: New best mean Average Precision: 0.83%
 Epoch:  1
-Epoch 2: New best mean Average Precision: 0.88%
+Epoch 2: New best mean Average Precision: 0.87%
 Epoch:  2
+Epoch 3: New best mean Average Precision: 0.89%
 Epoch:  3
 Epoch 4: New best mean Average Precision: 0.91%
 Epoch:  4
-Epoch 5: New best mean Average Precision: 0.92%
 Epoch:  5
+Epoch 6: New best mean Average Precision: 0.92%
 Epoch:  6
-Epoch 7: New best mean Average Precision: 0.92%
+Epoch 7: New best mean Average Precision: 0.93%
 Epoch:  7
-Epoch 8: New best mean Average Precision: 0.93%
+Epoch 8: New best mean Average Precision: 0.94%
 Epoch:  8
-Epoch 9: New best mean Average Precision: 0.94%
 Epoch:  9
 Epoch:  10
+Epoch 11: New best mean Average Precision: 0.95%
 Epoch:  11
 Epoch:  12
 Epoch:  13
-Epoch 14: New best mean Average Precision: 0.94%
 Epoch:  14
 Epoch:  15
 Epoch:  16
@@ -52,7 +52,6 @@ Epoch:  27
 Epoch:  28
 Epoch:  29
 Epoch:  30
-Epoch 31: New best mean Average Precision: 0.94%
 Epoch:  31
 Epoch:  32
 Epoch:  33
@@ -72,4 +71,4 @@ Epoch:  46
 Epoch:  47
 Epoch:  48
 Epoch:  49
-Plot saved to models/18-ResNet_2026-03-10_12-31-30/training_summary_plot.png
+Plot saved to models/18-ResNet_2026-03-10_12-51-05/training_summary_plot.png
