@@ -150,7 +150,7 @@ def main():
     print("Loading image data")
     
     BATCH_SIZE = 32
-    NUM_WORKERS = 1
+    NUM_WORKERS = 0
     is_cuda = device.type == "cuda"
     train_loader = DataLoader(train_set, batch_size=BATCH_SIZE, shuffle=True, num_workers=NUM_WORKERS, pin_memory=is_cuda) # pin memory loads it into the gpu, works only with cuda
     val_loader = DataLoader(val_set, batch_size=BATCH_SIZE, shuffle=False, num_workers=NUM_WORKERS, pin_memory=is_cuda)
@@ -165,7 +165,7 @@ def main():
             for opt_name in opt_names:
                 # setup of folder
                 timestamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
-                run_name = f"LR-{lr}_{opt_name}_{timestamp}"
+                run_name = f"LR-{lr}_EP-{epochs}_{opt_name}_{timestamp}"
                 model_name = f"{NUM_LAYERS}-ResNet"
                 save_dir = f"models/{model_name}_{run_name}"
                 os.makedirs(save_dir, exist_ok=True)
