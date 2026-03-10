@@ -258,6 +258,8 @@ def main():
         df = pd.read_csv(log_path)
         df_t = pd.read_csv(test_log_path)
         
+        plt.figure(figsize=(15, 6))
+        
         plt.subplot(1, 2, 1)
         plt.plot(df['epoch'], df['train_loss'], label='Train Loss', color='blue')
         plt.plot(df['epoch'], df['val_loss'], label='Val Loss', color='orange')
