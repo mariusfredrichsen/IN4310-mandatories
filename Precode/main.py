@@ -77,8 +77,8 @@ def evaluate_model(model, loader, device, criterion, num_classes, save_path=None
 
 
 def main():
-    PATH_TO_DATA = "../../../../../shared/courses/IN3310/mandatory1_data"
-#    PATH_TO_DATA = "../Dataset"
+    PATH_TO_DATA = "/itf-fi-ml/shared/courses/IN3310/mandatory1_data"
+#    PATH_TO_DATA = "../Dataset" #LOCAL SOLUTION
 
     IMAGE_SIZE = 150
     IMG_CHANNELS = 3
@@ -156,151 +156,185 @@ def main():
     val_loader = DataLoader(val_set, batch_size=BATCH_SIZE, shuffle=False, num_workers=NUM_WORKERS, pin_memory=is_cuda)
     test_loader = DataLoader(test_set, batch_size=BATCH_SIZE, shuffle=False, num_workers=NUM_WORKERS, pin_memory=is_cuda)
     
-    learning_rates = [0.01, 0.001, 0.0001]
-    epochs_list = [10, 25, 50]
-    opt_names = ["Adam", "Optim"]
+    scenarios = [
+        (0.01, 50, "Adam"),
+        (0.001, 25, "Adam"),
+        (0.0001, 25, "Optim"),
+        (0.001, 50, "Optim")
+    ]
     
-    for lr in learning_rates:
-        for epochs in epochs_list:
-            for opt_name in opt_names:
-                # setup of folder
-                timestamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
-                run_name = f"LR-{lr}_EP-{epochs}_{opt_name}_{timestamp}"
-                model_name = f"{NUM_LAYERS}-ResNet"
-                save_dir = f"models/{model_name}_{run_name}"
-                os.makedirs(save_dir, exist_ok=True)
-                    
-                # setup of model
-                model = ResNet(img_channels = IMG_CHANNELS, num_layers = NUM_LAYERS, num_classes = NUM_CLASSES).to(device)
-                optimizer = optim.Adam(model.parameters(), lr=lr) if opt_name == "Adam" else optim.SGD(model.parameters(), lr=lr, momentum=0.9)
-                criterion = nn.CrossEntropyLoss()
+    for lr, epochs, opt_name in scenarios:
+        # setup of folder
+        timestamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
+        run_name = f"LR-{lr}_EP-{epochs}_{opt_name}_{timestamp}"
+        model_name = f"{NUM_LAYERS}-ResNet"
+        save_dir = f"models/{model_name}_{run_name}"
+        os.makedirs(save_dir, exist_ok=True)
+            
+        # setup of model
+        model = ResNet(img_channels = IMG_CHANNELS, num_layers = NUM_LAYERS, num_classes = NUM_CLASSES).to(device)
+        optimizer = optim.Adam(model.parameters(), lr=lr) if opt_name == "Adam" else optim.SGD(model.parameters(), lr=lr, momentum=0.9)
+        criterion = nn.CrossEntropyLoss()
+        
+        # setup of data logging
+        log_path = f"{save_dir}/log.csv"
+        with open(log_path, "w") as f:
+            ap_headers = ",".join([f"AP_class{i}" for i in range(NUM_CLASSES)])
+            acc_headers = ",".join([f"ACC_class{i}" for i in range(NUM_CLASSES)])
+            header = f"epoch,train_loss,val_loss,val_acc,mAP,{ap_headers},{acc_headers}\n"
+            f.write(header)
+        
+        test_log_path = f"{save_dir}/test_log.csv"
+        with open(test_log_path, "w") as f:
+            ap_headers = ",".join([f"AP_class{i}" for i in range(NUM_CLASSES)])
+            acc_headers = ",".join([f"ACC_class{i}" for i in range(NUM_CLASSES)])
+            header = f"epoch,test_loss,test_acc,mAP,{ap_headers},{acc_headers}\n"
+            f.write(header)
+        
+        # training
+        best_mAP = -1.0
+        
+        for epoch in range(epochs):
+            print("Epoch: ", epoch)
+            # part a, loading the training data
+            model.train()
+            train_loss = 0.0
+            
+            for images, labels in train_loader:
+                images, labels = images.to(device), labels.to(device)
                 
-                # setup of data logging
-                log_path = f"{save_dir}/log.csv"
-                with open(log_path, "w") as f:
-                    ap_headers = ",".join([f"AP_class{i}" for i in range(NUM_CLASSES)])
-                    acc_headers = ",".join([f"ACC_class{i}" for i in range(NUM_CLASSES)])
-                    header = f"epoch,train_loss,val_loss,val_acc,mAP,{ap_headers},{acc_headers}\n"
-                    f.write(header)
+                optimizer.zero_grad()
+                output = model(images)
+                loss = criterion(output, labels)
+                loss.backward()
+                optimizer.step()
                 
-                test_log_path = f"{save_dir}/test_log.csv"
-                with open(test_log_path, "w") as f:
-                    ap_headers = ",".join([f"AP_class{i}" for i in range(NUM_CLASSES)])
-                    acc_headers = ",".join([f"ACC_class{i}" for i in range(NUM_CLASSES)])
-                    header = f"epoch,test_loss,test_acc,mAP,{ap_headers},{acc_headers}\n"
-                    f.write(header)
-                
-                # training
-                best_mAP = -1.0
-                
-                for epoch in range(epochs):
-                    print("Epoch: ", epoch)
-                    # part a, loading the training data
-                    model.train()
-                    train_loss = 0.0
-                    
-                    for images, labels in train_loader:
-                        images, labels = images.to(device), labels.to(device)
+                train_loss += loss.item()
+            
+            avg_train_loss = train_loss / len(train_loader)
+            
+            # part b, validation accuracy
+            val_mAP, val_acc, avg_val_loss, val_ap_scores, val_acc_scores, _ = evaluate_model(
+                model=model,
+                loader=val_loader,
+                device=device,
+                criterion=criterion,
+                num_classes=NUM_CLASSES,
+            )
                         
-                        optimizer.zero_grad()
-                        output = model(images)
-                        loss = criterion(output, labels)
-                        loss.backward()
-                        optimizer.step()
-                        
-                        train_loss += loss.item()
-                    
-                    avg_train_loss = train_loss / len(train_loader)
-                    
-                    # part b, validation accuracy
-                    val_mAP, val_acc, avg_val_loss, val_ap_scores, val_acc_scores, _ = evaluate_model(
-                        model=model,
-                        loader=val_loader,
-                        device=device,
-                        criterion=criterion,
-                        num_classes=NUM_CLASSES,
-                    )
-                                
-                    with open(log_path, "a") as f:
-                        val_ap_str = ",".join([f"{s:.4f}" for s in val_ap_scores])
-                        val_acc_str = ",".join([f"{s:.4f}" for s in val_acc_scores])
-                        f.write(f"{epoch+1},{avg_train_loss:.4f},{avg_val_loss:.4f},{val_acc:.2f},{val_mAP:.4f},{val_ap_str},{val_acc_str}\n")
-                    
-                    torch.save(model.state_dict(), f"{save_dir}/current_model.pth")
-                    if val_mAP > best_mAP:
-                        best_mAP = val_mAP
-                        torch.save(model.state_dict(), f"{save_dir}/best_model.pth")
-                        print(f"Epoch {epoch+1}: New best mean Average Precision: {best_mAP:.2f}%")
-                        
-                    test_mAP, test_acc, avg_test_loss, test_ap_scores, test_acc_scores, test_softmax = evaluate_model(
-                        model=model,
-                        loader=test_loader,
-                        device=device,
-                        criterion=criterion,
-                        num_classes=NUM_CLASSES
-                    )
-                    
-                    with open(test_log_path, "a") as f:
-                        test_ap_str = ",".join([f"{s:.4f}" for s in test_ap_scores])
-                        test_acc_str = ",".join([f"{s:.4f}" for s in test_acc_scores])
-                        f.write(f"{epoch+1},{avg_test_loss:.4f},{test_acc:.2f},{test_mAP:.4f},{test_ap_str},{test_acc_str}\n")
-                    
+            with open(log_path, "a") as f:
+                val_ap_str = ",".join([f"{s:.4f}" for s in val_ap_scores])
+                val_acc_str = ",".join([f"{s:.4f}" for s in val_acc_scores])
+                f.write(f"{epoch+1},{avg_train_loss:.4f},{avg_val_loss:.4f},{val_acc:.2f},{val_mAP:.4f},{val_ap_str},{val_acc_str}\n")
+            
+            torch.save(model.state_dict(), f"{save_dir}/current_model.pth")
+            if val_mAP > best_mAP:
+                best_mAP = val_mAP
+                torch.save(model.state_dict(), f"{save_dir}/best_model.pth")
+                print(f"Epoch {epoch+1}: New best mean Average Precision: {best_mAP:.2f}%")
                 
-                test_loaded_log_path = f"{save_dir}/test_loaded_log.csv"
-                test_npy_path = f"{save_dir}/test_softmax_scores.npy"
-                model.load_state_dict(torch.load(f"{save_dir}/best_model.pth", weights_only=True))
-                l_test_mAP, l_test_acc, l_avg_test_loss, l_test_ap_scores, l_test_acc_scores, l_test_softmax = evaluate_model(
-                    model=model,
-                    loader=test_loader,
-                    device=device,
-                    criterion=criterion,
-                    num_classes=NUM_CLASSES,
-                    save_path=test_loaded_log_path,
-                    softmax_path=test_npy_path
-                )
-                
-                try:
-                    # train and loss
-                    df = pd.read_csv(log_path)
-                    df_t = pd.read_csv(test_log_path)
-                    
-                    plt.figure(figsize=(15, 6))
-                    
-                    plt.subplot(1, 2, 1)
-                    plt.plot(df['epoch'], df['train_loss'], label='Train Loss', color='blue')
-                    plt.plot(df['epoch'], df['val_loss'], label='Val Loss', color='orange')
-                    plt.plot(df_t['epoch'], df_t['test_loss'], label='Test Loss', color='red', linestyle='--')
-                    
-                    plt.title('Loss History (Train vs Val vs Test)')
-                    plt.xlabel('Epochs')
-                    plt.ylabel('Loss')
-                    plt.legend()
-                    plt.grid(True, alpha=0.3)
-                    
-                    
-                    
-                    plt.subplot(1, 2, 2)
-                    plt.plot(df['epoch'], df['val_acc'], label='Val Accuracy', color='green', marker='o')
-                    plt.plot(df_t['epoch'], df_t['test_acc'], label='Test Accuracy', color='purple', marker='x')
-                    
-                    plt.title('Accuracy History')
-                    plt.xlabel('Epochs')
-                    plt.ylabel('Accuracy (%)')
-                    plt.legend()
-                    plt.grid(True, alpha=0.3)
-                    
-                    
-                    
-                    plt.tight_layout()
-                    plt.savefig(f"{save_dir}/training_summary_plot.png")
-                    plt.close()
-                    
-                except Exception as e:
-                    print(f"Plotting error: {e}")
-                
-                del model
-                del optimizer
-                torch.cuda.empty_cache()
+            test_mAP, test_acc, avg_test_loss, test_ap_scores, test_acc_scores, test_softmax = evaluate_model(
+                model=model,
+                loader=test_loader,
+                device=device,
+                criterion=criterion,
+                num_classes=NUM_CLASSES
+            )
+            
+            with open(test_log_path, "a") as f:
+                test_ap_str = ",".join([f"{s:.4f}" for s in test_ap_scores])
+                test_acc_str = ",".join([f"{s:.4f}" for s in test_acc_scores])
+                f.write(f"{epoch+1},{avg_test_loss:.4f},{test_acc:.2f},{test_mAP:.4f},{test_ap_str},{test_acc_str}\n")
+            
+        
+        model.load_state_dict(torch.load(f"{save_dir}/best_model.pth", weights_only=True))
+        test_npy_path = f"{save_dir}/test_softmax_scores.npy"
+        _, _, _, _, _, _ = evaluate_model(
+            model=model,
+            loader=test_loader,
+            device=device,
+            criterion=criterion,
+            num_classes=NUM_CLASSES,
+            softmax_path=test_npy_path
+        )
+        
+        _, _, _, _, _, l_test_softmax = evaluate_model(
+            model=model,
+            loader=test_loader,
+            device=device,
+            criterion=criterion,
+            num_classes=NUM_CLASSES,
+        )
+        
+        loaded_softmax_scores = np.load(test_npy_path)
+        is_match = np.allclose(l_test_softmax, loaded_softmax_scores)
+        with open(f"{save_dir}/compare_loaded_log.csv", "w") as f:
+            f.write("is a match" if is_match else "not a match")
+        
+        try:
+            # train and loss
+            df = pd.read_csv(log_path)
+            df_t = pd.read_csv(test_log_path)
+            
+            title_desc =  f"LR-{lr}_EP-{epochs}_OPT-{opt_name}"
+            
+            plt.figure(figsize=(20, 15))
+            
+            plt.subplot(2, 2, 1)
+            plt.plot(df['epoch'], df['train_loss'], label='Train Loss', color='blue')
+            plt.plot(df['epoch'], df['val_loss'], label='Val Loss', color='orange')
+            plt.plot(df_t['epoch'], df_t['test_loss'], label='Test Loss', color='red', linestyle='--')
+           
+            plt.title(f'Loss History (Train vs Val vs Test) {title_desc}')
+            plt.xlabel('Epochs')
+            plt.ylabel('Loss')
+            plt.legend()
+            plt.grid(True, alpha=0.3)
+            
+            
+            
+            plt.subplot(2, 2, 2)
+            plt.plot(df['epoch'], df['mAP'], label='Val mAP', color='orange')
+            plt.plot(df_t['epoch'], df_t['mAP'], label='Test mAP', color='red')
+            
+            plt.title(f'Mean Average Precision (Val vs Test) {title_desc}')
+            plt.xlabel('Epochs')
+            plt.ylabel('mAP (0.0 - 1.0)')
+            plt.legend()
+            plt.grid(True, alpha=0.3)
+            
+            
+            
+            plt.subplot(2, 2, 3)
+            for i in range(NUM_CLASSES):
+                plt.plot(df['epoch'], df[f'ACC_class{i}'], label=f'Class {i}', alpha=0.6, linestyle=':')
+            plt.plot(df['epoch'], df['val_acc']/100, label='Mean Val Acc', color='black', lw=3)
+            plt.title('Validation Accuracy Per Class', fontsize=14)
+            plt.xlabel('Epochs')
+            plt.ylabel('Accuracy (0.0 - 1.0)')
+            plt.legend(ncol=2, fontsize='small')
+            plt.grid(True, alpha=0.3)
+
+            plt.subplot(2, 2, 4)
+            for i in range(NUM_CLASSES):
+                plt.plot(df_t['epoch'], df_t[f'ACC_class{i}'], label=f'Class {i}', alpha=0.6, linestyle=':')
+            plt.plot(df_t['epoch'], df_t['test_acc']/100, label='Mean Test Acc', color='black', lw=3)
+            plt.title('Test Accuracy Per Class', fontsize=14)
+            plt.xlabel('Epochs')
+            plt.ylabel('Accuracy (0.0 - 1.0)')
+            plt.legend(ncol=2, fontsize='small')
+            plt.grid(True, alpha=0.3)
+
+            plt.tight_layout()
+            plt.savefig(f"{save_dir}/training_summary_plot.png")
+            plt.close()
+            
+        except Exception as e:
+            print(f"Plotting error: {e}")
+        
+        del model
+        del optimizer
+        torch.cuda.empty_cache()
 
 
 
