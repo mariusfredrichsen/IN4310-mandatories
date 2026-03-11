@@ -14,24 +14,185 @@ Overlaps val & test: 0
 
 Loading image data
 Epoch:  0
-Epoch 1: New best mean Average Precision: 0.83%
+Epoch 1: New best mean Average Precision: 0.73%
 Epoch:  1
-Epoch 2: New best mean Average Precision: 0.87%
+Epoch 2: New best mean Average Precision: 0.81%
+Epoch:  2
+Epoch 3: New best mean Average Precision: 0.86%
+Epoch:  3
+Epoch 4: New best mean Average Precision: 0.89%
+Epoch:  4
+Epoch 5: New best mean Average Precision: 0.90%
+Epoch:  5
+Epoch:  6
+Epoch 7: New best mean Average Precision: 0.92%
+Epoch:  7
+Epoch:  8
+Epoch:  9
+Epoch:  0
+Epoch 1: New best mean Average Precision: 0.81%
+Epoch:  1
+Epoch 2: New best mean Average Precision: 0.88%
 Epoch:  2
 Epoch 3: New best mean Average Precision: 0.89%
 Epoch:  3
-Epoch 4: New best mean Average Precision: 0.91%
+Epoch 4: New best mean Average Precision: 0.92%
+Epoch:  4
+Epoch 5: New best mean Average Precision: 0.92%
+Epoch:  5
+Epoch 6: New best mean Average Precision: 0.94%
+Epoch:  6
+Epoch:  7
+Epoch:  8
+Epoch:  9
+Epoch:  0
+Epoch 1: New best mean Average Precision: 0.67%
+Epoch:  1
+Epoch 2: New best mean Average Precision: 0.77%
+Epoch:  2
+Epoch 3: New best mean Average Precision: 0.78%
+Epoch:  3
+Epoch 4: New best mean Average Precision: 0.86%
+Epoch:  4
+Epoch:  5
+Epoch 6: New best mean Average Precision: 0.89%
+Epoch:  6
+Epoch 7: New best mean Average Precision: 0.90%
+Epoch:  7
+Epoch:  8
+Epoch 9: New best mean Average Precision: 0.93%
+Epoch:  9
+Epoch:  10
+Epoch:  11
+Epoch 12: New best mean Average Precision: 0.93%
+Epoch:  12
+Epoch:  13
+Epoch:  14
+Epoch:  15
+Epoch:  16
+Epoch:  17
+Epoch:  18
+Epoch:  19
+Epoch:  20
+Epoch:  21
+Epoch:  22
+Epoch:  23
+Epoch 24: New best mean Average Precision: 0.93%
+Epoch:  24
+Epoch:  0
+Epoch 1: New best mean Average Precision: 0.78%
+Epoch:  1
+Epoch 2: New best mean Average Precision: 0.82%
+Epoch:  2
+Epoch 3: New best mean Average Precision: 0.87%
+Epoch:  3
+Epoch 4: New best mean Average Precision: 0.92%
 Epoch:  4
 Epoch:  5
 Epoch 6: New best mean Average Precision: 0.92%
 Epoch:  6
 Epoch 7: New best mean Average Precision: 0.93%
 Epoch:  7
-Epoch 8: New best mean Average Precision: 0.94%
+Epoch:  8
+Epoch:  9
+Epoch 10: New best mean Average Precision: 0.94%
+Epoch:  10
+Epoch:  11
+Epoch:  12
+Epoch:  13
+Epoch:  14
+Epoch:  15
+Epoch:  16
+Epoch:  17
+Epoch:  18
+Epoch:  19
+Epoch:  20
+Epoch:  21
+Epoch:  22
+Epoch:  23
+Epoch:  24
+Epoch:  0
+Epoch 1: New best mean Average Precision: 0.72%
+Epoch:  1
+Epoch 2: New best mean Average Precision: 0.77%
+Epoch:  2
+Epoch 3: New best mean Average Precision: 0.83%
+Epoch:  3
+Epoch 4: New best mean Average Precision: 0.88%
+Epoch:  4
+Epoch 5: New best mean Average Precision: 0.89%
+Epoch:  5
+Epoch 6: New best mean Average Precision: 0.91%
+Epoch:  6
+Epoch 7: New best mean Average Precision: 0.91%
+Epoch:  7
+Epoch:  8
+Epoch 9: New best mean Average Precision: 0.92%
+Epoch:  9
+Epoch 10: New best mean Average Precision: 0.93%
+Epoch:  10
+Epoch:  11
+Epoch:  12
+Epoch:  13
+Epoch 14: New best mean Average Precision: 0.93%
+Epoch:  14
+Epoch:  15
+Epoch:  16
+Epoch:  17
+Epoch:  18
+Epoch 19: New best mean Average Precision: 0.94%
+Epoch:  19
+Epoch:  20
+Epoch:  21
+Epoch:  22
+Epoch:  23
+Epoch:  24
+Epoch:  25
+Epoch:  26
+Epoch:  27
+Epoch:  28
+Epoch:  29
+Epoch:  30
+Epoch:  31
+Epoch:  32
+Epoch:  33
+Epoch:  34
+Epoch:  35
+Epoch 36: New best mean Average Precision: 0.94%
+Epoch:  36
+Epoch:  37
+Epoch 38: New best mean Average Precision: 0.94%
+Epoch:  38
+Epoch:  39
+Epoch:  40
+Epoch:  41
+Epoch:  42
+Epoch:  43
+Epoch:  44
+Epoch:  45
+Epoch:  46
+Epoch:  47
+Epoch:  48
+Epoch:  49
+Epoch:  0
+Epoch 1: New best mean Average Precision: 0.81%
+Epoch:  1
+Epoch 2: New best mean Average Precision: 0.88%
+Epoch:  2
+Epoch 3: New best mean Average Precision: 0.90%
+Epoch:  3
+Epoch 4: New best mean Average Precision: 0.91%
+Epoch:  4
+Epoch 5: New best mean Average Precision: 0.92%
+Epoch:  5
+Epoch 6: New best mean Average Precision: 0.92%
+Epoch:  6
+Epoch 7: New best mean Average Precision: 0.93%
+Epoch:  7
+Epoch 8: New best mean Average Precision: 0.95%
 Epoch:  8
 Epoch:  9
 Epoch:  10
-Epoch 11: New best mean Average Precision: 0.95%
 Epoch:  11
 Epoch:  12
 Epoch:  13
@@ -71,4 +232,432 @@ Epoch:  46
 Epoch:  47
 Epoch:  48
 Epoch:  49
-Plot saved to models/18-ResNet_2026-03-10_12-51-05/training_summary_plot.png
+Epoch:  0
+Epoch 1: New best mean Average Precision: 0.80%
+Epoch:  1
+Epoch 2: New best mean Average Precision: 0.82%
+Epoch:  2
+Epoch 3: New best mean Average Precision: 0.90%
+Epoch:  3
+Epoch:  4
+Epoch:  5
+Epoch 6: New best mean Average Precision: 0.93%
+Epoch:  6
+Epoch:  7
+Epoch:  8
+Epoch:  9
+Epoch:  0
+Epoch 1: New best mean Average Precision: 0.85%
+Epoch:  1
+Epoch 2: New best mean Average Precision: 0.88%
+Epoch:  2
+Epoch 3: New best mean Average Precision: 0.92%
+Epoch:  3
+Epoch 4: New best mean Average Precision: 0.93%
+Epoch:  4
+Epoch:  5
+Epoch:  6
+Epoch:  7
+Epoch:  8
+Epoch:  9
+Epoch:  0
+Epoch 1: New best mean Average Precision: 0.72%
+Epoch:  1
+Epoch 2: New best mean Average Precision: 0.85%
+Epoch:  2
+Epoch 3: New best mean Average Precision: 0.87%
+Epoch:  3
+Epoch:  4
+Epoch 5: New best mean Average Precision: 0.90%
+Epoch:  5
+Epoch 6: New best mean Average Precision: 0.92%
+Epoch:  6
+Epoch:  7
+Epoch:  8
+Epoch 9: New best mean Average Precision: 0.93%
+Epoch:  9
+Epoch:  10
+Epoch 11: New best mean Average Precision: 0.93%
+Epoch:  11
+Epoch 12: New best mean Average Precision: 0.94%
+Epoch:  12
+Epoch:  13
+Epoch 14: New best mean Average Precision: 0.94%
+Epoch:  14
+Epoch:  15
+Epoch:  16
+Epoch:  17
+Epoch:  18
+Epoch:  19
+Epoch:  20
+Epoch:  21
+Epoch:  22
+Epoch:  23
+Epoch:  24
+Epoch:  0
+Epoch 1: New best mean Average Precision: 0.86%
+Epoch:  1
+Epoch 2: New best mean Average Precision: 0.90%
+Epoch:  2
+Epoch 3: New best mean Average Precision: 0.92%
+Epoch:  3
+Epoch 4: New best mean Average Precision: 0.92%
+Epoch:  4
+Epoch:  5
+Epoch:  6
+Epoch:  7
+Epoch:  8
+Epoch:  9
+Epoch:  10
+Epoch 11: New best mean Average Precision: 0.93%
+Epoch:  11
+Epoch:  12
+Epoch:  13
+Epoch 14: New best mean Average Precision: 0.93%
+Epoch:  14
+Epoch:  15
+Epoch:  16
+Epoch:  17
+Epoch:  18
+Epoch:  19
+Epoch 20: New best mean Average Precision: 0.94%
+Epoch:  20
+Epoch:  21
+Epoch:  22
+Epoch:  23
+Epoch:  24
+Epoch:  0
+Epoch 1: New best mean Average Precision: 0.73%
+Epoch:  1
+Epoch 2: New best mean Average Precision: 0.83%
+Epoch:  2
+Epoch 3: New best mean Average Precision: 0.91%
+Epoch:  3
+Epoch 4: New best mean Average Precision: 0.92%
+Epoch:  4
+Epoch:  5
+Epoch:  6
+Epoch 7: New best mean Average Precision: 0.93%
+Epoch:  7
+Epoch 8: New best mean Average Precision: 0.93%
+Epoch:  8
+Epoch:  9
+Epoch:  10
+Epoch:  11
+Epoch:  12
+Epoch:  13
+Epoch:  14
+Epoch:  15
+Epoch 16: New best mean Average Precision: 0.94%
+Epoch:  16
+Epoch:  17
+Epoch:  18
+Epoch:  19
+Epoch:  20
+Epoch:  21
+Epoch:  22
+Epoch:  23
+Epoch:  24
+Epoch:  25
+Epoch:  26
+Epoch:  27
+Epoch:  28
+Epoch:  29
+Epoch:  30
+Epoch:  31
+Epoch:  32
+Epoch:  33
+Epoch:  34
+Epoch:  35
+Epoch:  36
+Epoch:  37
+Epoch:  38
+Epoch:  39
+Epoch:  40
+Epoch:  41
+Epoch:  42
+Epoch:  43
+Epoch:  44
+Epoch:  45
+Epoch:  46
+Epoch:  47
+Epoch:  48
+Epoch:  49
+Epoch:  0
+Epoch 1: New best mean Average Precision: 0.84%
+Epoch:  1
+Epoch 2: New best mean Average Precision: 0.90%
+Epoch:  2
+Epoch 3: New best mean Average Precision: 0.91%
+Epoch:  3
+Epoch:  4
+Epoch:  5
+Epoch 6: New best mean Average Precision: 0.92%
+Epoch:  6
+Epoch:  7
+Epoch:  8
+Epoch:  9
+Epoch 10: New best mean Average Precision: 0.92%
+Epoch:  10
+Epoch:  11
+Epoch 12: New best mean Average Precision: 0.92%
+Epoch:  12
+Epoch 13: New best mean Average Precision: 0.93%
+Epoch:  13
+Epoch:  14
+Epoch:  15
+Epoch:  16
+Epoch 17: New best mean Average Precision: 0.93%
+Epoch:  17
+Epoch:  18
+Epoch 19: New best mean Average Precision: 0.93%
+Epoch:  19
+Epoch:  20
+Epoch:  21
+Epoch:  22
+Epoch 23: New best mean Average Precision: 0.93%
+Epoch:  23
+Epoch 24: New best mean Average Precision: 0.93%
+Epoch:  24
+Epoch 25: New best mean Average Precision: 0.94%
+Epoch:  25
+Epoch:  26
+Epoch:  27
+Epoch:  28
+Epoch 29: New best mean Average Precision: 0.94%
+Epoch:  29
+Epoch:  30
+Epoch:  31
+Epoch:  32
+Epoch:  33
+Epoch:  34
+Epoch:  35
+Epoch:  36
+Epoch 37: New best mean Average Precision: 0.94%
+Epoch:  37
+Epoch 38: New best mean Average Precision: 0.94%
+Epoch:  38
+Epoch:  39
+Epoch:  40
+Epoch 41: New best mean Average Precision: 0.94%
+Epoch:  41
+Epoch 42: New best mean Average Precision: 0.94%
+Epoch:  42
+Epoch:  43
+Epoch:  44
+Epoch:  45
+Epoch:  46
+Epoch:  47
+Epoch:  48
+Epoch 49: New best mean Average Precision: 0.94%
+Epoch:  49
+Epoch:  0
+Epoch 1: New best mean Average Precision: 0.84%
+Epoch:  1
+Epoch 2: New best mean Average Precision: 0.90%
+Epoch:  2
+Epoch 3: New best mean Average Precision: 0.92%
+Epoch:  3
+Epoch 4: New best mean Average Precision: 0.93%
+Epoch:  4
+Epoch:  5
+Epoch:  6
+Epoch:  7
+Epoch:  8
+Epoch:  9
+Epoch:  0
+Epoch 1: New best mean Average Precision: 0.72%
+Epoch:  1
+Epoch 2: New best mean Average Precision: 0.81%
+Epoch:  2
+Epoch 3: New best mean Average Precision: 0.88%
+Epoch:  3
+Epoch 4: New best mean Average Precision: 0.89%
+Epoch:  4
+Epoch 5: New best mean Average Precision: 0.89%
+Epoch:  5
+Epoch 6: New best mean Average Precision: 0.89%
+Epoch:  6
+Epoch 7: New best mean Average Precision: 0.90%
+Epoch:  7
+Epoch 8: New best mean Average Precision: 0.92%
+Epoch:  8
+Epoch:  9
+Epoch:  0
+Epoch 1: New best mean Average Precision: 0.84%
+Epoch:  1
+Epoch 2: New best mean Average Precision: 0.92%
+Epoch:  2
+Epoch:  3
+Epoch 4: New best mean Average Precision: 0.92%
+Epoch:  4
+Epoch:  5
+Epoch 6: New best mean Average Precision: 0.92%
+Epoch:  6
+Epoch:  7
+Epoch:  8
+Epoch:  9
+Epoch:  10
+Epoch:  11
+Epoch:  12
+Epoch:  13
+Epoch:  14
+Epoch:  15
+Epoch:  16
+Epoch 17: New best mean Average Precision: 0.92%
+Epoch:  17
+Epoch:  18
+Epoch:  19
+Epoch:  20
+Epoch:  21
+Epoch:  22
+Epoch 23: New best mean Average Precision: 0.92%
+Epoch:  23
+Epoch:  24
+Epoch:  0
+Epoch 1: New best mean Average Precision: 0.71%
+Epoch:  1
+Epoch 2: New best mean Average Precision: 0.81%
+Epoch:  2
+Epoch 3: New best mean Average Precision: 0.87%
+Epoch:  3
+Epoch 4: New best mean Average Precision: 0.89%
+Epoch:  4
+Epoch 5: New best mean Average Precision: 0.90%
+Epoch:  5
+Epoch 6: New best mean Average Precision: 0.90%
+Epoch:  6
+Epoch:  7
+Epoch:  8
+Epoch 9: New best mean Average Precision: 0.91%
+Epoch:  9
+Epoch 10: New best mean Average Precision: 0.91%
+Epoch:  10
+Epoch:  11
+Epoch 12: New best mean Average Precision: 0.92%
+Epoch:  12
+Epoch 13: New best mean Average Precision: 0.92%
+Epoch:  13
+Epoch:  14
+Epoch:  15
+Epoch:  16
+Epoch:  17
+Epoch:  18
+Epoch:  19
+Epoch:  20
+Epoch:  21
+Epoch:  22
+Epoch:  23
+Epoch:  24
+Epoch:  0
+Epoch 1: New best mean Average Precision: 0.88%
+Epoch:  1
+Epoch 2: New best mean Average Precision: 0.91%
+Epoch:  2
+Epoch:  3
+Epoch 4: New best mean Average Precision: 0.92%
+Epoch:  4
+Epoch:  5
+Epoch 6: New best mean Average Precision: 0.92%
+Epoch:  6
+Epoch:  7
+Epoch:  8
+Epoch:  9
+Epoch:  10
+Epoch:  11
+Epoch:  12
+Epoch:  13
+Epoch:  14
+Epoch:  15
+Epoch:  16
+Epoch:  17
+Epoch:  18
+Epoch:  19
+Epoch:  20
+Epoch:  21
+Epoch:  22
+Epoch:  23
+Epoch:  24
+Epoch:  25
+Epoch:  26
+Epoch:  27
+Epoch:  28
+Epoch:  29
+Epoch:  30
+Epoch:  31
+Epoch:  32
+Epoch:  33
+Epoch:  34
+Epoch:  35
+Epoch:  36
+Epoch:  37
+Epoch:  38
+Epoch:  39
+Epoch:  40
+Epoch:  41
+Epoch:  42
+Epoch:  43
+Epoch:  44
+Epoch:  45
+Epoch:  46
+Epoch:  47
+Epoch:  48
+Epoch:  49
+Epoch:  0
+Epoch 1: New best mean Average Precision: 0.72%
+Epoch:  1
+Epoch 2: New best mean Average Precision: 0.81%
+Epoch:  2
+Epoch 3: New best mean Average Precision: 0.86%
+Epoch:  3
+Epoch 4: New best mean Average Precision: 0.88%
+Epoch:  4
+Epoch 5: New best mean Average Precision: 0.89%
+Epoch:  5
+Epoch:  6
+Epoch:  7
+Epoch 8: New best mean Average Precision: 0.91%
+Epoch:  8
+Epoch 9: New best mean Average Precision: 0.92%
+Epoch:  9
+Epoch:  10
+Epoch:  11
+Epoch 12: New best mean Average Precision: 0.92%
+Epoch:  12
+Epoch:  13
+Epoch:  14
+Epoch:  15
+Epoch:  16
+Epoch:  17
+Epoch:  18
+Epoch:  19
+Epoch:  20
+Epoch:  21
+Epoch:  22
+Epoch:  23
+Epoch:  24
+Epoch:  25
+Epoch:  26
+Epoch:  27
+Epoch:  28
+Epoch:  29
+Epoch:  30
+Epoch:  31
+Epoch:  32
+Epoch:  33
+Epoch:  34
+Epoch:  35
+Epoch:  36
+Epoch:  37
+Epoch:  38
+Epoch:  39
+Epoch:  40
+Epoch:  41
+Epoch:  42
+Epoch:  43
+Epoch:  44
+Epoch:  45
+Epoch:  46
+Epoch:  47
+Epoch:  48
+Epoch:  49
