@@ -165,7 +165,7 @@ def main():
     
     
 
-    lr, epochs, opt_name = (0.1, 3, "Adam")
+    lr, epochs, opt_name = (0.001, 25, "Adam")
     optimizer = optim.Adam(model.parameters(), lr=lr) if opt_name == "Adam" else optim.SGD(model.parameters(), lr=lr, momentum=0.9)
     criterion = nn.CrossEntropyLoss()
     
