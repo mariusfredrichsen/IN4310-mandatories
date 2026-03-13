@@ -1,0 +1,2 @@
+epoch,test_loss,test_acc,mAP,AP_class0,AP_class1,AP_class2,AP_class3,AP_class4,AP_class5,ACC_class0,ACC_class1,ACC_class2,ACC_class3,ACC_class4,ACC_class5
+1,1.1454,54.61,0.5799,0.4908,0.9070,0.5475,0.5860,0.3691,0.5787,0.5835,0.8970,0.5602,0.6453,0.1337,0.4566
