@@ -300,6 +300,7 @@ def main():
             plt.title(f'Mean Average Precision (Val vs Test) {title_desc}')
             plt.xlabel('Epochs')
             plt.ylabel('mAP (0.0 - 1.0)')
+            plt.ylim(0, 1)
             plt.legend()
             plt.grid(True, alpha=0.3)
             
@@ -311,6 +312,7 @@ def main():
             plt.plot(df['epoch'], df['val_acc']/100, label='Mean Val Acc', color='black', lw=3)
             plt.title('Validation Accuracy Per Class', fontsize=14)
             plt.xlabel('Epochs')
+            plt.ylim(0, 1)
             plt.ylabel('Accuracy (0.0 - 1.0)')
             plt.legend(ncol=2, fontsize='small')
             plt.grid(True, alpha=0.3)
@@ -322,6 +324,7 @@ def main():
             plt.title('Test Accuracy Per Class', fontsize=14)
             plt.xlabel('Epochs')
             plt.ylabel('Accuracy (0.0 - 1.0)')
+            plt.ylim(0, 1)
             plt.legend(ncol=2, fontsize='small')
             plt.grid(True, alpha=0.3)
 
