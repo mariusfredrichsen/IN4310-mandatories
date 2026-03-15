@@ -109,10 +109,28 @@ def main():
     
     features = {}
     
-    layers = ['layer1', 'layer2', 'layer3', 'layer4']
+    zeros_percentage = {}
+    
+    layers = ['conv1', 'layer1', 'layer2', 'layer3', 'layer4']
     
     def hook(module, input, output):
         features[module.name] = output.detach()
+        if not module.name in zeros_percentage:
+            zeros_percentage[module.name] = (0.0, 0)
+        
+        negatives = torch.sum(output <= 0).item()
+        total = output.numel()
+        
+        u_step = negatives / total
+        n_step = output.shape[0]
+        
+        m_t, n_t = zeros_percentage[module.name]
+        m_next = (m_t * n_t + u_step * n_step) / (n_t + n_step)
+        n_next = n_t + n_step
+        
+        zeros_percentage[module.name] = (m_next, n_next)
+        
+        
     
     for name in layers:
         layer = getattr(model, name)
@@ -125,14 +143,32 @@ def main():
     images, labels = next(iter(test_loader))
     images = images.to(device)
     
-    
+    TARGET_NUM_IMAGES = 200
+    processed = 0
     model.eval()
+    
     with torch.no_grad():
-        model(images[:NUM_IMAGES])
+        for imgs, _ in test_loader:
+            if processed >= TARGET_NUM_IMAGES:
+                break
+            
+            batch_size = min(len(imgs), TARGET_NUM_IMAGES - processed)
+            current_batch = imgs[:batch_size].to(device)
+            
+            model(current_batch)
+            processed += batch_size
+        
+    log_path = f"non_positive_values.csv"
+    with open(log_path, "w") as f:
+        header = ",".join(layers) + "\n"
+        f.write(header)
+        
+        data = [f"{zeros_percentage[name][0] * 100:.2f}" for name in layers]
+        f.write(",".join(data) + "\n")
     
     os.makedirs("images", exist_ok=True)
-    for i in range(NUM_IMAGES):
-        fig, axes = plt.subplots(nrows=4, ncols=7, figsize=(15,8))
+    for i in range(len(features[layers[0]])):
+        fig, axes = plt.subplots(nrows=len(layers), ncols=7, figsize=(15,8))
         fig.suptitle(f"Feature maps for image {i}")
         
         for y, name in enumerate(layers):
@@ -152,7 +188,6 @@ def main():
         plt.savefig(save_path)
         plt.close()
                 
-    print(features)    
     
     return 0
 
