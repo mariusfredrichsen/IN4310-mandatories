@@ -23,8 +23,8 @@ from datetime import datetime
 
 
 def main():
-    ATH_TO_DATA = "/itf-fi-ml/shared/courses/IN3310/mandatory1_data"
-    # PATH_TO_DATA = "../Dataset" #LOCAL SOLUTION
+    PATH_TO_DATA = "/itf-fi-ml/shared/courses/IN3310/mandatory1_data"
+    PATH_TO_DATA = "../Dataset" #LOCAL SOLUTION
 
     IMAGE_SIZE = 150
     IMG_CHANNELS = 3
@@ -107,6 +107,52 @@ def main():
     model.fc = nn.Linear(num_features, NUM_CLASSES)
     model = model.to(device)
     
+    features = {}
+    
+    layers = ['layer1', 'layer2', 'layer3', 'layer4']
+    
+    def hook(module, input, output):
+        features[module.name] = output.detach()
+    
+    for name in layers:
+        layer = getattr(model, name)
+        layer.name = name
+        layer.register_forward_hook(hook)
+    
+    NUM_IMAGES = 10
+    
+    
+    images, labels = next(iter(test_loader))
+    images = images.to(device)
+    
+    
+    model.eval()
+    with torch.no_grad():
+        model(images[:NUM_IMAGES])
+    
+    os.makedirs("images", exist_ok=True)
+    for i in range(NUM_IMAGES):
+        fig, axes = plt.subplots(nrows=4, ncols=7, figsize=(15,8))
+        fig.suptitle(f"Feature maps for image {i}")
+        
+        for y, name in enumerate(layers):
+            tensor = features[name][i].cpu()
+            
+            for x in range(7):
+                ax = axes[y, x]
+                feature = tensor[x].numpy()
+                
+                ax.imshow(feature)
+                
+                if x == 0:
+                    ax.set_title(f"{name}")
+        
+        plt.tight_layout()
+        save_path = f"images/feature_{i}.png"
+        plt.savefig(save_path)
+        plt.close()
+                
+    print(features)    
     
     return 0
 
