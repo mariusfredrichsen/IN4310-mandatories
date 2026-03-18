@@ -83,7 +83,7 @@ def main():
     IMAGE_SIZE = 150
     IMG_CHANNELS = 3
     NUM_CLASSES = 6
-    NUM_LAYERS = 18
+    NUM_LAYERS = 101
     
     # A lot of this code is from the seminars
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
@@ -157,10 +157,10 @@ def main():
     test_loader = DataLoader(test_set, batch_size=BATCH_SIZE, shuffle=False, num_workers=NUM_WORKERS, pin_memory=is_cuda)
     
     scenarios = [
-        (0.01, 50, "Adam"),
+  #      (0.01, 50, "Adam"),
         (0.001, 25, "Adam"),
-        (0.0001, 25, "Optim"),
-        (0.001, 50, "Optim")
+#        (0.0001, 25, "Optim"),
+#        (0.001, 50, "Optim")
     ]
     
     for lr, epochs, opt_name in scenarios:
