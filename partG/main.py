@@ -168,13 +168,13 @@ def main():
     
     os.makedirs("images", exist_ok=True)
     for i in range(len(features[layers[0]])):
-        fig, axes = plt.subplots(nrows=len(layers), ncols=7, figsize=(15,8))
+        fig, axes = plt.subplots(nrows=len(layers), ncols=5, figsize=(15,8))
         fig.suptitle(f"Feature maps for image {i}")
         
         for y, name in enumerate(layers):
             tensor = features[name][i].cpu()
             
-            for x in range(7):
+            for x in range(NUM_IMAGES):
                 ax = axes[y, x]
                 feature = tensor[x].numpy()
                 
