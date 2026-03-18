@@ -16,60 +16,60 @@ from datetime import datetime
 
 
 def evaluate_model(model, loader, device, criterion, num_classes, save_path=None, softmax_path=None):
-        model.eval()
-        total_loss = 0.0
-        all_probs = []
-        all_preds = []
-        all_labels = []
+    model.eval()
+    total_loss = 0.0
+    all_probs = []
+    all_preds = []
+    all_labels = []
 
-        with torch.no_grad():
-            for images, labels in loader:
-                images, labels = images.to(device), labels.to(device)
-                output = model(images)
-                loss = criterion(output, labels)
-                total_loss += loss.item()
-                
-                probs = torch.softmax(output, dim=1)
-                _, preds = torch.max(output, 1)
-                
-                all_probs.extend(probs.cpu().numpy())
-                all_preds.extend(preds.cpu().numpy())
-                all_labels.extend(labels.cpu().numpy())
-
-        all_probs = np.array(all_probs)
-        all_preds = np.array(all_preds)
-        all_labels = np.array(all_labels)
-        
-        ap_scores = []
-        acc_scores = []
-        for i in range(num_classes):
-            mask = (all_labels == i)
-            binary_labels = mask.astype(int)
+    with torch.no_grad():
+        for images, labels in loader:
+            images, labels = images.to(device), labels.to(device)
+            output = model(images)
+            loss = criterion(output, labels)
+            total_loss += loss.item()
             
-            ap = average_precision_score(binary_labels, all_probs[:, i])
-            ap_scores.append(ap)
+            probs = torch.softmax(output, dim=1)
+            _, preds = torch.max(output, 1)
             
-            acc = np.mean(all_preds[mask] == i)
-            acc_scores.append(acc)
+            all_probs.extend(probs.cpu().numpy())
+            all_preds.extend(preds.cpu().numpy())
+            all_labels.extend(labels.cpu().numpy())
 
-        avg_loss = total_loss / len(loader)
-        mean_acc = 100 * np.mean(all_preds == all_labels)
-        mAP = np.mean(ap_scores)
-
-        ap_headers = ",".join([f"AP_class{i}" for i in range(num_classes)])
-        acc_headers = ",".join([f"ACC_class{i}" for i in range(num_classes)])
+    all_probs = np.array(all_probs)
+    all_preds = np.array(all_preds)
+    all_labels = np.array(all_labels)
+    
+    ap_scores = []
+    acc_scores = []
+    for i in range(num_classes):
+        mask = (all_labels == i)
+        binary_labels = mask.astype(int)
         
-        if save_path:
-            with open(save_path, "w") as f:
-                f.write(f"loss,total_acc,mAP,{ap_headers},{acc_headers}\n")
-                ap_str = ",".join([f"{s:.4f}" for s in ap_scores])
-                acc_str = ",".join([f"{s:.4f}" for s in acc_scores])
-                f.write(f"{avg_loss:.4f},{mean_acc:.2f},{mAP:.4f},{ap_str},{acc_str}\n")
+        ap = average_precision_score(binary_labels, all_probs[:, i])
+        ap_scores.append(ap)
         
-        if softmax_path:
-            np.save(softmax_path, all_probs)
+        acc = np.mean(all_preds[mask] == i)
+        acc_scores.append(acc)
 
-        return mAP, mean_acc, avg_loss, ap_scores, acc_scores, all_probs
+    avg_loss = total_loss / len(loader)
+    mean_acc = 100 * np.mean(all_preds == all_labels)
+    mAP = np.mean(ap_scores)
+
+    ap_headers = ",".join([f"AP_class{i}" for i in range(num_classes)])
+    acc_headers = ",".join([f"ACC_class{i}" for i in range(num_classes)])
+    
+    if save_path:
+        with open(save_path, "w") as f:
+            f.write(f"loss,total_acc,mAP,{ap_headers},{acc_headers}\n")
+            ap_str = ",".join([f"{s:.4f}" for s in ap_scores])
+            acc_str = ",".join([f"{s:.4f}" for s in acc_scores])
+            f.write(f"{avg_loss:.4f},{mean_acc:.2f},{mAP:.4f},{ap_str},{acc_str}\n")
+    
+    if softmax_path:
+        np.save(softmax_path, all_probs)
+
+    return mAP, mean_acc, avg_loss, ap_scores, acc_scores, all_probs
 
 
 
