@@ -187,8 +187,8 @@ def main():
         save_path = f"images/feature_{i}.png"
         plt.savefig(save_path)
         plt.close()
-                
-    
+   
+
     return 0
 
 
