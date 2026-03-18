@@ -80,7 +80,7 @@ def evaluate_model(model, loader, device, criterion, num_classes, save_path=None
     
 def main():
     PATH_TO_DATA = "/itf-fi-ml/shared/courses/IN3310/mandatory1_data"
-    PATH_TO_DATA = "../Dataset" #LOCAL SOLUTION
+    # PATH_TO_DATA = "../Dataset" #LOCAL SOLUTION
 
     IMAGE_SIZE = 150
     IMG_CHANNELS = 3
@@ -158,14 +158,14 @@ def main():
     val_loader = DataLoader(val_set, batch_size=BATCH_SIZE, shuffle=False, num_workers=NUM_WORKERS, pin_memory=is_cuda)
     test_loader = DataLoader(test_set, batch_size=BATCH_SIZE, shuffle=False, num_workers=NUM_WORKERS, pin_memory=is_cuda)
     
-    model = models.resnet18(pretrained=True, weights=models.ResNet18_Weights.DEFAULT)
+    model = models.resnet18(weights=models.ResNet18_Weights.DEFAULT)
     num_features = model.fc.in_features
     model.fc = nn.Linear(num_features, NUM_CLASSES)
     model = model.to(device)
     
     
 
-    lr, epochs, opt_name = (0.001, 25, "Adam")
+    lr, epochs, opt_name = (0.001, 25, "Adam") # best results from part a-e
     optimizer = optim.Adam(model.parameters(), lr=lr) if opt_name == "Adam" else optim.SGD(model.parameters(), lr=lr, momentum=0.9)
     criterion = nn.CrossEntropyLoss()
     
